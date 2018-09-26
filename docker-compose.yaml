@@ -1,0 +1,49 @@
+version: '3.3'
+
+services:
+  docker-mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: example_db
+      MYSQL_USER: example_db_user
+      MYSQL_PASSWORD: example_db_pass
+    ports:
+      - 3306:3306
+    volumes:
+        - datastore
+
+  datastore:
+    image: busybox
+    volumes:
+      - /var/lib/docker-mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - docker-mysql
+    environment:
+      PMA_HOST: docker-mysql
+      PMA_PORT: 3306
+    ports:
+      - '8091:80'
+
+  webContener:
+    image: seba/tom
+    depends_on:
+        - docker-mysql
+    ports:
+      - 8080:8080
+    environment:
+      JDBC_URL: jdbc:mysql://db:3306/example_db?connectTimeout=0&amp;socketTimeout=0&amp;autoReconnect=true
+      JDBC_USER: example_db_user
+      JDBC_PASS: example_db_pass
+
+  php:
+    image: php:latest
+    ports:
+      - '80:80'
+    links:
+      - docker-mysql
+    volumes:
+      - ./php/www:/srv/www

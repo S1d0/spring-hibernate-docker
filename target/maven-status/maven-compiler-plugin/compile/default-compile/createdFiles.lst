@@ -1,0 +1,8 @@
+com\pluralsight\controller\GoalController.class
+com\pluralsight\controller\HelloController.class
+com\pluralsight\controller\MinutesController.class
+com\pluralsight\model\Activity.class
+com\pluralsight\service\ExerciseServiceImpl.class
+com\pluralsight\service\ExerciseService.class
+com\pluralsight\model\Exercise.class
+com\pluralsight\model\Goal.class
